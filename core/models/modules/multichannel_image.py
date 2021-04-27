@@ -3,7 +3,7 @@ import torch.nn as nn
 from .modulated_conv2d import ModulatedConv2d
 
 
-class MultichannelIamge(nn.Module):
+class MultichannelImage(nn.Module):
     def __init__(
             self,
             channels_in,

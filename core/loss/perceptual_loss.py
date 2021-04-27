@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torchvision.models as models
-
+import pdb
 
 class PerceptualNetwork(nn.Module):
     def __init__(
@@ -14,6 +14,7 @@ class PerceptualNetwork(nn.Module):
         assert hasattr(models, arch)
         self.net = getattr(models, arch)(pretrained=True).features
         self.layers = layers
+        # pdb.set_trace()
 
     def forward(self, x):
         out = {}

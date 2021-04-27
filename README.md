@@ -50,6 +50,8 @@ python compare.py --cfg configs/mobile_stylegan_ffhq.json --ckpt <path_to_ckpt>
 ## Convert to ONNX
 ```bash
 python train.py --cfg configs/mobile_stylegan_ffhq.json --ckpt <path_to_ckpt> --to-onnx <onnx_prefix_name>
+
+python train.py --cfg configs/mobile_stylegan_ffhq.json --to-onnx mobile
 ```
 
 ## Deployment using OpenVINO

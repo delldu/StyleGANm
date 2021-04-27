@@ -16,12 +16,12 @@ from core.models.inception_v3 import load_inception_v3
 # evaluation metric
 from piq import KID
 
+import pdb
 
 class Distiller(pl.LightningModule):
     def __init__(self, cfg, **kwargs):
         super().__init__()
         self.cfg = cfg.trainer
-
         # dataset
         self.trainset = NoiseDataset(batch_size=self.cfg.batch_size, **cfg.trainset)
         self.valset = NoiseDataset(batch_size=self.cfg.batch_size, **cfg.valset)
@@ -29,13 +29,20 @@ class Distiller(pl.LightningModule):
         # teacher model
         # teacher_ckpt = model_zoo(**cfg.teacher)
         print("load mapping network...")
+        # cfg.teacher.mapping_network
+        # {'name': 'stylegan2_ffhq_config_f_mapping_network.ckpt'}
+
         mapping_net_ckpt = model_zoo(**cfg.teacher.mapping_network)
+
+        # xxxx8888
         self.mapping_net = MappingNetwork(**mapping_net_ckpt["params"]).eval()
         self.mapping_net.load_state_dict(mapping_net_ckpt["ckpt"])
+
         print("load synthesis network...")
         synthesis_net_ckpt = model_zoo(**cfg.teacher.synthesis_network)
         self.synthesis_net = SynthesisNetwork(**synthesis_net_ckpt["params"]).eval()
         self.synthesis_net.load_state_dict(synthesis_net_ckpt["ckpt"])
+
         #compute style_mean
         self.register_buffer(
             "style_mean",
@@ -43,6 +50,7 @@ class Distiller(pl.LightningModule):
         )
 
         # student network
+        # xxxx8888
         self.student = MobileSynthesisNetwork(style_dim=self.mapping_net.style_dim)
 
         # loss
@@ -57,6 +65,8 @@ class Distiller(pl.LightningModule):
 
         # device info
         self.register_buffer("device_info", torch.tensor(1))
+
+        # pdb.set_trace()
 
     def _log_loss(self, loss, on_step=True, on_epoch=False, prog_bar=True, logger=True, exclude=["loss"]):
         for k, v in loss.items():
@@ -180,6 +190,7 @@ class Distiller(pl.LightningModule):
 
         print("convert mapping network...")
         self.mapping_net.apply(onnx_trace_setup)
+
         torch.onnx.export(
             self.mapping_net,
             (var,),

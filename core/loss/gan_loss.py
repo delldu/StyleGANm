@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from core.models.discriminator import Discriminator
 from core.loss.diffaug import get_default_transforms
-
+import pdb
 
 class GANLoss(nn.Module):
     def __init__(
@@ -19,6 +19,10 @@ class GANLoss(nn.Module):
         self.perceptual = perceptual
         self.transforms = get_default_transforms()
         self.register_buffer("device_info", torch.ones(1))
+        # pdb.set_trace()
+        # image_size = 1024
+        # channels_in = 3
+        # perceptual = False
 
     def forward(self, x):
         if self.transforms is not None:

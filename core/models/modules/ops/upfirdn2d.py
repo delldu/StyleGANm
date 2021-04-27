@@ -1,20 +1,25 @@
 import torch
 import torch.nn.functional as F
-if torch.cuda.is_available(): from .upfirdn2d_cuda import *
+# if torch.cuda.is_available(): from .upfirdn2d_cuda import *
 
 
 def upfirdn2d(input, kernel, up=1, down=1, pad=(0, 0)):
-    if input.device.type == "cpu":
-        out = upfirdn2d_native(
-            input, kernel, up, up, down, down, pad[0], pad[1], pad[0], pad[1]
-        )
+    # xxxx8888
+    # if input.device.type == "cpu":
+    #     out = upfirdn2d_native(
+    #         input, kernel, up, up, down, down, pad[0], pad[1], pad[0], pad[1]
+    #     )
 
-    elif torch.cuda.is_available():
-        out = UpFirDn2d.apply(
-            input, kernel, (up, up), (down, down), (pad[0], pad[1], pad[0], pad[1])
-        )
-    else:
-        raise NotImplemented
+    # elif torch.cuda.is_available():
+    #     out = UpFirDn2d.apply(
+    #         input, kernel, (up, up), (down, down), (pad[0], pad[1], pad[0], pad[1])
+    #     )
+    # else:
+    #     raise NotImplemented
+
+    out = upfirdn2d_native(
+        input, kernel, up, up, down, down, pad[0], pad[1], pad[0], pad[1]
+    )
 
     return out
 

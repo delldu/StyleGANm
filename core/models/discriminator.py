@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from .modules.legacy import *
 
+import pdb
 
 class ConvLayer(nn.Sequential):
     def __init__(
@@ -42,15 +43,16 @@ class ConvLayer(nn.Sequential):
             )
         )
 
+        # bias = True
+        # activate = True
         if activate:
             if bias:
                 layers.append(FusedLeakyReLU(out_channel))
-
             else:
                 layers.append(ScaledLeakyReLU(0.2))
 
         super().__init__(*layers)
-
+        # pdb.set_trace()
 
 class ResBlock(nn.Module):
     def __init__(self, in_channel, out_channel, blur_kernel=[1, 3, 3, 1]):
@@ -112,8 +114,21 @@ class Discriminator(nn.Module):
             EqualLinear(channels[4] * 4 * 4, channels[4], activation='fused_lrelu'),
             EqualLinear(channels[4], 1),
         )
+        # self = ConvLayer(
+        #   (0): EqualConv2d(3, 32, 1, stride=1, padding=0)
+        #   (1): FusedLeakyReLU()
+        # )
+        # in_channel = 3
+        # out_channel = 32
+        # kernel_size = 1
+        # downsample = False
+        # blur_kernel = [1, 3, 3, 1]
+        # bias = True
+        # activate = True
 
     def forward(self, x):
+        pdb.set_trace()
+
         out = {"features": []}
         for m in self.convs:
             x = m(x)
@@ -135,5 +150,7 @@ class Discriminator(nn.Module):
         x = x.view(batch, -1)
         x = self.final_linear(x).sigmoid()
         out["out"] = x
+
+        pdb.set_trace()
 
         return out

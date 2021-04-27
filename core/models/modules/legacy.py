@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from .ops import *
-
+import pdb
 
 def make_kernel(k):
     k = torch.tensor(k, dtype=torch.float32)
@@ -218,6 +218,17 @@ class ModulatedConv2d(nn.Module):
         self.modulation = EqualLinear(style_dim, in_channel, bias_init=1)
 
         self.demodulate = demodulate
+        # pdb.set_trace()
+        # self = ModulatedConv2d(512, 512, 3, upsample=False, downsample=False)
+        # in_channel = 512
+        # out_channel = 512
+        # kernel_size = 3
+        # style_dim = 512
+        # demodulate = True
+        # upsample = False
+        # downsample = False
+        # blur_kernel = [1, 3, 3, 1]
+
 
     def __repr__(self):
         return (

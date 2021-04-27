@@ -6,6 +6,7 @@ import numpy as np
 from core.utils import load_cfg, load_weights, tensor_to_img
 from core.distiller import Distiller
 from core.model_zoo import model_zoo
+import pdb
 
 def main(args):
     cfg = load_cfg(args.cfg)
@@ -28,10 +29,10 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     # pipeline configure
     parser.add_argument("--cfg", type=str, default="configs/mobile_stylegan_ffhq.json", help="path to config file")
-    parser.add_argument("--ckpt", type=str, default="mobilestylegan_ffhq.ckpt", help="path to checkpoint")
+    parser.add_argument("--ckpt", type=str, default="models/mobilestylegan_ffhq.ckpt", help="path to checkpoint")
     parser.add_argument("--truncated", action='store_true', help="use truncation mode")
     args = parser.parse_args()
     main(args)

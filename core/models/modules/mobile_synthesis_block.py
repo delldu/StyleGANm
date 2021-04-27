@@ -31,7 +31,7 @@ class MobileSynthesisBlock(nn.Module):
             kernel_size,
             conv_module=conv_module
         )
-        self.to_img = MultichannelIamge(
+        self.to_img = MultichannelImage(
             channels_in=channels_out,
             channels_out=12,
             style_dim=style_dim,

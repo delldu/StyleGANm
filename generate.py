@@ -7,6 +7,7 @@ from core.utils import load_cfg, load_weights, tensor_to_img
 from core.distiller import Distiller
 from core.model_zoo import model_zoo
 from tqdm import tqdm
+import pdb
 
 @torch.no_grad
 def main(args):
@@ -28,11 +29,11 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     # pipeline configure
     parser.add_argument("--device", type=str, default="cpu", help="select device for inference")
     parser.add_argument("--cfg", type=str, default="configs/mobile_stylegan_ffhq.json", help="path to config file")
-    parser.add_argument("--ckpt", type=str, default="mobilestylegan_ffhq.ckpt", help="path to checkpoint")
+    parser.add_argument("--ckpt", type=str, default="models/mobilestylegan_ffhq.ckpt", help="path to checkpoint")
     parser.add_argument("--truncated", action='store_true', help="use truncation mode")
     parser.add_argument("--output-path", type=str, default="./", help="path to store images")
     parser.add_argument("--batch-size", type=int, default=10, help="batch size")

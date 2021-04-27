@@ -2,7 +2,7 @@ import json
 import torch
 import gdown
 from addict import Dict
-
+import pdb
 
 def tensor_to_img(t, normalize=True, range=(-1, 1), to_numpy=True, rgb2bgr=True):
     if normalize:
@@ -18,8 +18,8 @@ def tensor_to_img(t, normalize=True, range=(-1, 1), to_numpy=True, rgb2bgr=True)
 
 def download_ckpt(url, name, md5):
     print(f"load pretrained model: {name}...")
-    ckpt_path = f"/tmp/{name}"
-    gdown.cached_download(url, ckpt_path, md5=md5)
+    ckpt_path = f"models/{name}"
+    # gdown.cached_download(url, ckpt_path, md5=md5)
     ckpt = torch.load(ckpt_path, map_location="cpu")
     return ckpt
 

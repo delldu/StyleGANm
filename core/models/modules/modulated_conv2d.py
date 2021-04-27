@@ -2,7 +2,7 @@ import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+import pdb
 
 class ModulatedConv2d(nn.Module):
     def __init__(
@@ -28,6 +28,14 @@ class ModulatedConv2d(nn.Module):
         # some service staff
         self.scale = 1.0 / math.sqrt(channels_in * kernel_size ** 2)
         self.padding = kernel_size // 2
+        # self = ModulatedConv2d(
+        #   (modulation): Linear(in_features=512, out_features=512, bias=True)
+        # )
+        # channels_in = 512
+        # channels_out = 12
+        # style_dim = 512
+        # kernel_size = 1
+        # demodulate = False
 
     def forward(self, x, style):
         modulation = self.get_modulation(style)

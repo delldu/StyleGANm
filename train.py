@@ -44,7 +44,7 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     # pipeline configure
     parser.add_argument("--gpus", type=int, default=-1, help="number of available GPUs")
     parser.add_argument('--distributed-backend', type=str, default="ddp", choices=('dp', 'ddp', 'ddp2'),
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     parser.add_argument("--checkpoint_dir", type=str, default=None, help="path to checkpoint_dir")
     parser.add_argument("--val-check-interval", type=int, default=500, help="validation check interval")
     parser.add_argument("--grad_batches", type=int, default=1, help="number of batches to accumulate")
-    parser.add_argument("--ckpt", type=str, default=None, help="path to checkpoint")
+    parser.add_argument("--ckpt", type=str, default="models/mobilestylegan_ffhq.ckpt", help="path to checkpoint")
     parser.add_argument("--cfg", type=str, help="path to config file")
     parser.add_argument("--to-onnx", type=str, default=None, help="convert to onnx")
     args = parser.parse_args()
