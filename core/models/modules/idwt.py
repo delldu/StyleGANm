@@ -3,13 +3,13 @@ import torch.nn as nn
 from pytorch_wavelets.dwt.lowlevel import *
 import pdb
 
-def _SFB2D(low, highs, g0_row, g1_row, g0_col, g1_col, mode):
-    mode = int_to_mode(mode)
+def _SFB2D(low, highs, g0_row, g1_row, g0_col, g1_col):
+    # low size torch.Size([1, 32, 256, 256]) highs size: torch.Size([1, 32, 3, 256, 256]
 
     lh, hl, hh = torch.unbind(highs, dim=2)
-    lo = sfb1d(low, lh, g0_col, g1_col, mode=mode, dim=2)
-    hi = sfb1d(hl, hh, g0_col, g1_col, mode=mode, dim=2)
-    y = sfb1d(lo, hi, g0_row, g1_row, mode=mode, dim=3)
+    lo = sfb1d(low, lh, g0_col, g1_col, mode='zero', dim=2)
+    hi = sfb1d(hl, hh, g0_col, g1_col, mode='zero', dim=2)
+    y = sfb1d(lo, hi, g0_row, g1_row, mode='zero', dim=3)
 
     return y
 
@@ -25,15 +25,21 @@ class DWTInverse(nn.Module):
         super().__init__()
 
         if isinstance(wave, str):
+            print("CheckPoint 1 ----------------------------")
+
             wave = pywt.Wavelet(wave)
         if isinstance(wave, pywt.Wavelet):
             # ==>
+            print("CheckPoint 2 ----------------------------")
+
             g0_col, g1_col = wave.rec_lo, wave.rec_hi
             g0_row, g1_row = g0_col, g1_col
             # (Pdb) g0_col, g1_col
             # ([0.7071067811865476, 0.7071067811865476], 
             #     [0.7071067811865476, -0.7071067811865476])
         else:
+            print("CheckPoint 3 ----------------------------")
+
             if len(wave) == 2:
                 g0_col, g1_col = wave[0], wave[1]
                 g0_row, g1_row = g0_col, g1_col
@@ -103,10 +109,14 @@ class DWTInverse(nn.Module):
                 ll = ll[...,:-1,:]
             if ll.shape[-1] > h.shape[-1]:
                 ll = ll[...,:-1]
-            if not self.onnx_trace:
-                ll = SFB2D.apply(ll, h, self.g0_col, self.g1_col, self.g0_row, self.g1_row, mode)
-            else:
-                ll = _SFB2D(ll, h, self.g0_col, self.g1_col, self.g0_row, self.g1_row, mode)
+            # if not self.onnx_trace:
+            #     print("CheckPoint 5 ----------------------------")
+            #     ll = SFB2D.apply(ll, h, self.g0_col, self.g1_col, self.g0_row, self.g1_row, mode)
+            # else:
+            #     print("CheckPoint 6 ----------------------------")
+            #     ll = _SFB2D(ll, h, self.g0_col, self.g1_col, self.g0_row, self.g1_row, mode)
+            # xxxx8888
+            ll = _SFB2D(ll, h, self.g0_col, self.g1_col, self.g0_row, self.g1_row)
 
         # (Pdb) pp ll.size() -- torch.Size([1, 128, 8, 8])
 

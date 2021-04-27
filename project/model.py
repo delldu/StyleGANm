@@ -18,6 +18,7 @@ import torch
 import torch.nn as nn
 from tqdm import tqdm
 
+from model_helper import MappingNetwork, MobileSynthesisNetwork
 
 class FaceGANModel(nn.Module):
     """FaceGAN Model."""
@@ -26,6 +27,11 @@ class FaceGANModel(nn.Module):
         """Init model."""
 
         super(FaceGANModel, self).__init__()
+        self.style_dim = 512
+        self.n_layers = 8
+        self.map_net = MappingNetwork(self.style_dim, self.n_layers)
+        self.gen_net = MobileSynthesisNetwork(self.style_dim)
+
 
     def forward(self, x):
         """Forward."""
@@ -205,3 +211,10 @@ def model_setenv():
     print("----------------------------------------------")
     print("  PWD: ", os.environ["PWD"])
     print("  DEVICE: ", os.environ["DEVICE"])
+
+
+if __name__ == '__main__':
+    """Model Test ..."""
+
+    model = FaceGANModel()
+    print(model)

@@ -1,5 +1,7 @@
 ## MobileStyleGAN: A Lightweight Convolutional Neural Network for High-Fidelity Image Synthesis
 
+### NOT GOOD ENOUGH !!!
+
 Official PyTorch Implementation
 
 <p align="center">

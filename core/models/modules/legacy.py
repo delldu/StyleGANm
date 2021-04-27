@@ -128,28 +128,33 @@ class EqualLinear(nn.Module):
 
         self.weight = nn.Parameter(torch.randn(out_dim, in_dim).div_(lr_mul))
 
-        if bias:
-            self.bias = nn.Parameter(torch.zeros(out_dim).fill_(bias_init))
+        # xxxx8888
+        # if bias:
+        #     self.bias = nn.Parameter(torch.zeros(out_dim).fill_(bias_init))
+        # else:
+        #     self.bias = None
 
-        else:
-            self.bias = None
+        self.bias = nn.Parameter(torch.zeros(out_dim).fill_(bias_init))
 
-        self.activation = activation
+        # self.activation = activation
 
         self.scale = (1 / math.sqrt(in_dim)) * lr_mul
         self.lr_mul = lr_mul
         self.onnx_trace = onnx_trace
 
     def forward(self, input):
-        if self.activation:
-            out = F.linear(input, self.weight * self.scale)
-            out = fused_leaky_relu(out, self.bias * self.lr_mul, onnx_trace=self.onnx_trace)
+        # xxxx8888
+        # if self.activation:
+        #     out = F.linear(input, self.weight * self.scale)
+        #     out = fused_leaky_relu(out, self.bias * self.lr_mul, onnx_trace=self.onnx_trace)
 
-        else:
-            out = F.linear(
-                input, self.weight * self.scale, bias=self.bias * self.lr_mul
-            )
+        # else:
+        #     out = F.linear(
+        #         input, self.weight * self.scale, bias=self.bias * self.lr_mul
+        #     )
 
+        out = F.linear(input, self.weight * self.scale)
+        out = fused_leaky_relu(out, self.bias * self.lr_mul, onnx_trace=self.onnx_trace)
         return out
 
     def __repr__(self):
@@ -161,12 +166,10 @@ class EqualLinear(nn.Module):
 class ScaledLeakyReLU(nn.Module):
     def __init__(self, negative_slope=0.2):
         super().__init__()
-
         self.negative_slope = negative_slope
 
     def forward(self, input):
         out = F.leaky_relu(input, negative_slope=self.negative_slope)
-
         return out * math.sqrt(2)
 
 
